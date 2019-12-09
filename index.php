@@ -29,33 +29,40 @@ $products = [
     ['name' => 'Ice-tea', 'price' => 3],
 ];
 $totalValue = 0;
-require 'form-view.php';
-
+//edit: deze file onder andere code gezet
+//require 'form-view.php';
 // edit: below all code written by me, Jan
 
-// to do: check if set
-// to do validate
-
-
-
-
-
-
-
-
+// TO DO: After sending the form, when you have errors show them in a nice error box above the form, you can use the bootstrap alerts for inspiration. https://getbootstrap.com/docs/4.0/components/alerts/
+// TO DO: If the form is valid (for now) just show the user a message above the form that his order has been sent
 
 if (isset($_POST["submit"])) {
     // was niet gemakkelijk om verschillende issets voor fields te combineren // 
     // opgelet: is set werkt niet goed, omdat het blijkbaar een empty string is var_dump($_POST["email"]);
     if (!empty($_POST["email"]) && !empty($_POST["street"])  && !empty($_POST["streetnumber"])  && !empty($_POST["city"])  && !empty($_POST["zipcode"])) {
-        echo "is not empty";
+        // echo "is not empty";
         if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
             $email = $_POST["email"];
-            echo "is valid";
+            // echo "is valid";
+            $_SESSION["email"] = $email;
+            echo $_SESSION["email"];
+            var_dump($_SESSION["email"]);
         } else {
             echo "<script type='text/javascript'>alert('You need to enter a valid e-mailadress');</script>";
+        }
+        if (!is_numeric($_POST["streetnumber"]) || !is_numeric($_POST["zipcode"])) {
+            echo  "<script type='text/javascript'>alert('You need to enter a number in both the streetnumber and zipcode fields');</script>";
+        } else {
+            // echo "succes!";
+            $streetnumber = $_POST["streetnumber"];
+            $zipcode = $_POST["zipcode"];
+            $_SESSION["streetnumber"] = $streetnumber;
+            $_SESSION["zipcode"] = $zipcode;
         }
     } else {
         echo "<script type='text/javascript'>alert('You need to fill out the form');</script>";
     }
 }
+
+// deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
+require 'form-view.php';
