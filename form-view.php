@@ -95,11 +95,31 @@
 
             <fieldset>
                 <legend>Products</legend>
-                <?php foreach ($products as $i => $product) : ?>
+                <?php
+                //echo $_SERVER["SERVER_NAME"];
+                $url = $_SERVER["REQUEST_URI"];
+                // echo $url;
+                $url_separated = explode("?", $url);
+                // print_r( $url_separated);
+                $type_selector_string = $url_separated[1];
+                // echo $type_selector_string;
+                $type_selector_stringnumber = substr($type_selector_string, -1);
+                // echo $type_selector_stringnumber;
+
+                if ($type_selector_stringnumber == 1) {
+                    foreach ($products_food as $i => $product) : ?>
+                        <label>
+                            <input type="checkbox" value="1" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
+                            &euro; <?php echo number_format($product['price'], 2) ?></label><br />
+                    <?php endforeach; 
+                }
+                else {
+                foreach ($products_drinks as $i => $product) : ?>
                     <label>
                         <input type="checkbox" value="1" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
                         &euro; <?php echo number_format($product['price'], 2) ?></label><br />
-                <?php endforeach; ?>
+                <?php endforeach; 
+                }?>
             </fieldset>
 
             <button type="submit" class="btn btn-primary" name="submit">Order!</button>
