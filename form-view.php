@@ -24,12 +24,14 @@
         </nav>
         <!-- dit toegevoegd -->
         <?php
-        if (isset($_SESSION["errorcookie"])) {
-            if ($_SESSION["errorcookie"] == 1) {
-            echo '<div class="alert alert-primary" role="alert">
-            This is a primary alert—check it out!
-        </div>';
+        if (!empty($_SESSION["error-array-cookie"])) {
+            echo '<div class="alert alert-primary" role="alert">';
+            echo "<ul>";
+            foreach ($_SESSION["error-array-cookie"] as $error) {
+                echo "<li>$error</li>";
             }
+            echo "</ul>";
+            echo "</div>";
         }
         ?>
         <form method="post" action="index.php">
