@@ -109,15 +109,16 @@
                     // echo $type_selector_stringnumber;
                 }
                 if ($type_selector_stringnumber == 1) {
+                    // ook moeten aanpassen zodat value gepakt wordt
                     foreach ($products_food as $i => $product) : ?>
                         <label>
-                            <input type="checkbox" value="1" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
+                            <input type="checkbox" value="<?php echo $product['price']; ?>" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
                             &euro; <?php echo number_format($product['price'], 2) ?></label><br />
                     <?php endforeach;
                     } else {
                         foreach ($products_drinks as $i => $product) : ?>
                         <label>
-                            <input type="checkbox" value="1" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
+                            <input type="checkbox" value="<?php echo $product['price']; ?>" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
                             &euro; <?php echo number_format($product['price'], 2) ?></label><br />
                 <?php endforeach;
                 } ?>

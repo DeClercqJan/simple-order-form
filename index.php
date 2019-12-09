@@ -68,6 +68,10 @@ if (isset($_POST["submit"])) {
     $_SESSION["city"] = $city;
     $delivery_type =  $_POST["delivery-type"];
     $_SESSION["delivery-type"] = $delivery_type;
+    // TO DO: ALLE SELECTED ITEMS TOEVOEGEN AAN ARRAY
+    // dusver heb ik html al wat kunnen veradneren dat de value veranderd is, maar het lukt me nog niet om verschillende zaken te selecteren
+    $items_selected = [];
+
 }
 
 $_SESSION["error-array-cookie"] = $error_array;
@@ -91,7 +95,11 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     $message = "";
     $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. The order is TO DO <br>";
     // echo $message;
-    mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
+
+    //DEZE BESTE DUSVER
+    // mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
+
+
     // TO DO nu mail maken die er mooi uitziet in e-mailclient. Sander heeft daar een mooiere manier voor, door een html tempalte te maken, die aan te roepen met file_get_contents en dan een aantal zaken te veradneren"
     // letterlijke code van https://emailmonks.com/blog/email-coding/step-step-guide-create-html-email rendert niet  in mijn gmail
     // hieronder ook eens wat escape characters gebruikt //
