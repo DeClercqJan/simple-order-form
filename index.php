@@ -77,5 +77,9 @@ if (isset($_POST["submit"])) {
 
 $_SESSION["error-array-cookie"] = $error_array;
 
-// deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
+if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
+    mail("declercqjan@gmail.com", "test", "testen of knop werkt");
+}
+    
+    // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
 require 'form-view.php';
