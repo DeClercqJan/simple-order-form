@@ -122,7 +122,13 @@
                 <?php endforeach;
                 } ?>
             </fieldset>
-
+            <fieldset>
+                <legend>Products</legend>
+                <label for="normal">normal(2 hours)</label>
+                <input type="radio" name="delivery-type" value="normal" id="delivery-type" checked></br>
+                <label for="express">express (45 minutes)</label>
+                <input type="radio" name="delivery-type" value="express" id="delivery-type"></br>
+            </fieldset>
             <button type="submit" class="btn btn-primary" name="submit">Order!</button>
         </form>
 
