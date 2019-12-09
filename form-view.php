@@ -22,6 +22,16 @@
                 </li>
             </ul>
         </nav>
+        <!-- dit toegevoegd -->
+        <?php
+        if (isset($_SESSION["errorcookie"])) {
+            if ($_SESSION["errorcookie"] == 1) {
+            echo '<div class="alert alert-primary" role="alert">
+            This is a primary alert—check it out!
+        </div>';
+            }
+        }
+        ?>
         <form method="post" action="index.php">
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -45,11 +55,11 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="streetnumber">Street number:</label>
-                        <input type="text" id="streetnumber" name="streetnumber" class="form-control"<?php
-                                                                                    if (isset($_SESSION["streetnumber"])) {
-                                                                                        echo "value=" . $_SESSION["streetnumber"];
-                                                                                    }
-                                                                                    ?>/>
+                        <input type="text" id="streetnumber" name="streetnumber" class="form-control" <?php
+                                                                                                        if (isset($_SESSION["streetnumber"])) {
+                                                                                                            echo "value=" . $_SESSION["streetnumber"];
+                                                                                                        }
+                                                                                                        ?> />
                     </div>
                 </div>
                 <div class="form-row">
@@ -60,10 +70,10 @@
                     <div class="form-group col-md-6">
                         <label for="zipcode">Zipcode</label>
                         <input type="text" id="zipcode" name="zipcode" class="form-control" <?php
-                                                                                    if (isset($_SESSION["zipcode"])) {
-                                                                                        echo "value=" . $_SESSION["zipcode"];
-                                                                                    }
-                                                                                    ?>/>
+                                                                                            if (isset($_SESSION["zipcode"])) {
+                                                                                                echo "value=" . $_SESSION["zipcode"];
+                                                                                            }
+                                                                                            ?> />
                     </div>
                 </div>
             </fieldset>

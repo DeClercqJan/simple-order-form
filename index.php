@@ -39,28 +39,31 @@ $totalValue = 0;
 if (isset($_POST["submit"])) {
     // was niet gemakkelijk om verschillende issets voor fields te combineren // 
     // opgelet: is set werkt niet goed, omdat het blijkbaar een empty string is var_dump($_POST["email"]);
-    if (!empty($_POST["email"]) && !empty($_POST["street"])  && !empty($_POST["streetnumber"])  && !empty($_POST["city"])  && !empty($_POST["zipcode"])) {
-        // echo "is not empty";
-        if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-            $email = $_POST["email"];
-            // echo "is valid";
-            $_SESSION["email"] = $email;
-            echo $_SESSION["email"];
-            var_dump($_SESSION["email"]);
-        } else {
-            echo "<script type='text/javascript'>alert('You need to enter a valid e-mailadress');</script>";
-        }
-        if (!is_numeric($_POST["streetnumber"]) || !is_numeric($_POST["zipcode"])) {
-            echo  "<script type='text/javascript'>alert('You need to enter a number in both the streetnumber and zipcode fields');</script>";
-        } else {
-            // echo "succes!";
-            $streetnumber = $_POST["streetnumber"];
-            $zipcode = $_POST["zipcode"];
-            $_SESSION["streetnumber"] = $streetnumber;
-            $_SESSION["zipcode"] = $zipcode;
-        }
+    if (empty($_POST["email"]) || empty($_POST["street"]) || empty($_POST["streetnumber"])  || empty($_POST["city"]) || empty($_POST["zipcode"])) {
+        echo "<script type='text/javascript'>alert('You need to fill out all the fields');</script>";
+        $_SESSION["errorcookie"] = 1;
+    }
+
+    if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        $email = $_POST["email"];
+        $_SESSION["email"] = $email;
     } else {
-        echo "<script type='text/javascript'>alert('You need to fill out the form');</script>";
+        echo "<script type='text/javascript'>alert('You need to enter a valid e-mailadress');</script>";
+        $_SESSION["errorcookie"] = 1;
+    }
+    if (is_numeric($_POST["streetnumber"])) {
+        $streetnumber = $_POST["streetnumber"];
+        $_SESSION["streetnumber"] = $streetnumber;
+    } else {
+        $_SESSION["errorcookie"] = 1;
+        echo  "<script type='text/javascript'>alert('You need to enter a number in both the streetnumber field');</script>";
+    }
+    if (is_numeric($_POST["zipcode"])) {
+        $zipcode = $_POST["zipcode"];
+        $_SESSION["zipcode"] = $zipcode;
+    } else {
+        $_SESSION["errorcookie"] = 1;
+        echo  "<script type='text/javascript'>alert('You need to enter a number in both the zipcode field');</script>";
     }
 }
 
