@@ -46,13 +46,13 @@ if (isset($_POST["submit"])) {
         array_push($error_array, "You need to fill out all the fields");
     }
 
+
     if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
         $email = $_POST["email"];
         $_SESSION["email"] = $email;
     } else {
         // echo "<script type='text/javascript'>alert('You need to enter a valid e-mailadress');</script>";
         array_push($error_array, "You need to enter a valid e-mail adress");
-
     }
     if (is_numeric($_POST["streetnumber"])) {
         $streetnumber = $_POST["streetnumber"];
@@ -68,6 +68,11 @@ if (isset($_POST["submit"])) {
         echo  "<script type='text/javascript'>alert('You need to enter a number in both the zipcode field');</script>";
         array_push($error_array, "You need to enter a number in the zipcode number field");
     }
+
+    $street = $_POST["street"];
+    $_SESSION["street"] = $street;
+    $city = $_POST["city"];
+    $_SESSION["city"] = $city;
 }
 
 $_SESSION["error-array-cookie"] = $error_array;

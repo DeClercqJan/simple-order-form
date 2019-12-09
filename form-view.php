@@ -25,12 +25,17 @@
         <!-- dit toegevoegd -->
         <?php
         if (!empty($_SESSION["error-array-cookie"])) {
-            echo '<div class="alert alert-primary" role="alert">';
+            echo '<div class="alert alert-danger" role="alert">';
             echo "<ul>";
             foreach ($_SESSION["error-array-cookie"] as $error) {
                 echo "<li>$error</li>";
             }
             echo "</ul>";
+            echo "</div>";
+        }
+        if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
+            echo '<div class="alert alert-primary" role="alert">';
+            echo "your order was succesfully sent! Feeding process initiated";
             echo "</div>";
         }
         ?>
@@ -53,7 +58,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="street">Street:</label>
-                        <input type="text" name="street" id="street" class="form-control">
+                        <input type="text" name="street" id="street" class="form-control" <?php
+                                                                                            if (isset($_SESSION["street"])) {
+                                                                                                echo "value=" . $_SESSION["street"];
+                                                                                            }
+                                                                                            ?>>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="streetnumber">Street number:</label>
@@ -67,7 +76,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="city">City:</label>
-                        <input type="text" id="city" name="city" class="form-control">
+                        <input type="text" id="city" name="city" class="form-control" <?php
+                                                                                        if (isset($_SESSION["city"])) {
+                                                                                            echo "value=" . $_SESSION["city"];
+                                                                                        }
+                                                                                        ?>>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="zipcode">Zipcode</label>
