@@ -125,7 +125,7 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
             $this->$total_order = (float) $total_order;
             foreach ($items_selected_new as $key => $value) {
                 // moest het omvormen, want anders kwam hij gelijk soms op  6 terwijl het resultaat 5 moest zijn
-                $this->$total_order +=(float) $value;
+                $this->$total_order += (float) $value;
             }
             // $this->$total_order = $value_float;
             // $this->$total_order = $total_order * 2;
@@ -134,10 +134,13 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // $total_order = 0;
     $total_order = "total order";
     $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
-    var_dump($new_order);
+    // var_dump($new_order);
+    // na bevolking van de variabele door constructorfunctie ook waarde doorgeven aan variabele die onderaan de pagina staat
+    $totalValue = $new_order->$total_order;
 
     $message = "";
-    $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. The order is TO DO <br>";
+    // opgelet: hieronder spreek ik eigenlijk niet mijn object aan. Hoewel een interessante oefening, heb ik het nu zo gedaan.
+    $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. The order is TO DO. The amount to be paid is $totalValue";
     // echo $message;
 
     //DEZE BESTE DUSVER
