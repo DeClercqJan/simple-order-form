@@ -221,3 +221,4 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
 
 // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
 require 'form-view.php';
+whatIsHappening();

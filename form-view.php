@@ -39,7 +39,7 @@
             echo "</div>";
         }
         ?>
-        <form method="post" action="index.php">
+        <form method="get" action="index.php">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="email">E-mail:</label>
