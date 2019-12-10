@@ -159,7 +159,7 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // echo $message;
 
     //DEZE BESTE DUSVER
-    // mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
+    mail("declercqjan@gmail.com", "Succesful order @ the Personal Ham Processors", $message);
 
 
     // TO DO nu mail maken die er mooi uitziet in e-mailclient. Sander heeft daar een mooiere manier voor, door een html tempalte te maken, die aan te roepen met file_get_contents en dan een aantal zaken te veradneren"
@@ -221,4 +221,3 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
 
 // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
 require 'form-view.php';
-whatIsHappening();
