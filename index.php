@@ -29,7 +29,7 @@ $products_drinks = [
     ['name' => 'Sprite', 'price' => 2],
     ['name' => 'Ice-tea', 'price' => 3],
 ];
-$totalValue = 0;
+$order_total = 0;
 //edit: deze file onder andere code gezet
 //require 'form-view.php';
 // edit: below all code written by me, Jan
@@ -140,7 +140,7 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
     $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
     // var_dump($new_order);
     // na bevolking van de variabele door constructorfunctie ook waarde doorgeven aan variabele die onderaan de pagina staat
-    $totalValue = $new_order->$total_order;
+    $order_total = $new_order->$total_order;
 
     // nu van al die verschillende gekochte zaken in het object een string maken om mee te geven met de message (ook een string)
     // OPGELET: GEEN $ BIJ ODNERSTAANDE PROPERTY
@@ -155,11 +155,11 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
 
     $message = "";
     // opgelet: hieronder spreek ik eigenlijk niet mijn object aan. Hoewel een interessante oefening, heb ik het nu zo gedaan.
-    $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. You have ordered $ordered_items_string. The amount to be paid is $totalValue";
+    $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. You have ordered $ordered_items_string. The amount to be paid is $order_total";
     // echo $message;
 
     //DEZE BESTE DUSVER
-    mail("declercqjan@gmail.com", "Succesful order @ the Personal Ham Processors", $message);
+    // mail("declercqjan@gmail.com", "Succesful order @ the Personal Ham Processors", $message);
 
 
     // TO DO nu mail maken die er mooi uitziet in e-mailclient. Sander heeft daar een mooiere manier voor, door een html tempalte te maken, die aan te roepen met file_get_contents en dan een aantal zaken te veradneren"
@@ -217,6 +217,32 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
 </table>
 </body>
 </html>"; */
+}
+
+// deze ook verplaatst, want ik sprak al eerder mijn header aan met, ik denk $_SERVER (zie bestand form-view)
+if (!isset($_COOKIE["previous-orders-value"])) {
+    if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
+        $totalValue_result = $order_total;
+        // echo $order_total;
+        // enigste manier waarop ik cookie kon laten veranderen
+        // moest cookie ook string meegeven
+        setcookie("previous-orders-value", strval($order_total));
+    } else {
+        $totalValue_result = 0;
+    }
+} else {
+    if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
+        $previous_orders_value = $_COOKIE["previous-orders-value"];
+        echo $previous_orders_value;
+        $totalValue = $previous_orders_value + $order_total;
+        setcookie("previous-orders-value", strval($totalValue));
+        // $totalValue_result = "previeous orders value + nieuwe order indien succesvol hier, zijnde $totalValue";
+        $totalValue_result = $totalValue;
+    } else {
+        $previous_orders_value = $_COOKIE["previous-orders-value"];
+        // $totalValue_result = "previeous orders value, zijnde $previous_orders_value";
+        $totalValue_result = $previous_orders_value;
+    }
 }
 
 // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
