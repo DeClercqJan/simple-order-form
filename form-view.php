@@ -35,7 +35,13 @@
         }
         if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
             echo '<div class="alert alert-primary" role="alert">';
-            echo "your order was succesfully sent! Feeding process initiated";
+            echo "your order was succesfully sent! Feeding process initiated ";
+            if ($delivery_type == "normal") {
+                echo "You'll receive nutrients within 2 hours";
+            }
+            if ($delivery_type == "express") {
+                echo "You'll receive nutrients in 45 minutes";
+            }
             echo "</div>";
         }
         ?>
@@ -133,7 +139,7 @@
             <button type="submit" class="btn btn-primary" name="submit">Order!</button>
         </form>
 
-        <footer>You already ordered <strong>&euro; <?php echo $totalValue_result?></strong> in food and drinks.</footer>
+        <footer>You already ordered <strong>&euro; <?php echo $totalValue_result ?></strong> in food and drinks.</footer>
     </div>
 
     <style>
