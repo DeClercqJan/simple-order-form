@@ -36,45 +36,45 @@ $totalValue = 0;
 
 $error_array = array();
 
-if (isset($_POST["submit"])) {
+if (isset($_GET["submit"])) {
     // was niet gemakkelijk om verschillende issets voor fields te combineren // 
-    // opgelet: is set werkt niet goed, omdat het blijkbaar een empty string is var_dump($_POST["email"]);
-    if (empty($_POST["email"]) || empty($_POST["street"]) || empty($_POST["streetnumber"])  || empty($_POST["city"]) || empty($_POST["zipcode"])) {
+    // opgelet: is set werkt niet goed, omdat het blijkbaar een empty string is var_dump($_GET["email"]);
+    if (empty($_GET["email"]) || empty($_GET["street"]) || empty($_GET["streetnumber"])  || empty($_GET["city"]) || empty($_GET["zipcode"])) {
         array_push($error_array, "You need to fill out all the fields");
     }
 
-    if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-        $email = $_POST["email"];
+    if (filter_var($_GET["email"], FILTER_VALIDATE_EMAIL)) {
+        $email = $_GET["email"];
         $_SESSION["email"] = $email;
     } else {
         array_push($error_array, "You need to enter a valid e-mail adress");
     }
-    if (is_numeric($_POST["streetnumber"])) {
-        $streetnumber = $_POST["streetnumber"];
+    if (is_numeric($_GET["streetnumber"])) {
+        $streetnumber = $_GET["streetnumber"];
         $_SESSION["streetnumber"] = $streetnumber;
     } else {
         array_push($error_array, "You need to enter a number in the street number field");
     }
-    if (is_numeric($_POST["zipcode"])) {
-        $zipcode = $_POST["zipcode"];
+    if (is_numeric($_GET["zipcode"])) {
+        $zipcode = $_GET["zipcode"];
         $_SESSION["zipcode"] = $zipcode;
     } else {
         array_push($error_array, "You need to enter a number in the zipcode number field");
     }
 
-    $street = $_POST["street"];
+    $street = $_GET["street"];
     $_SESSION["street"] = $street;
-    $city = $_POST["city"];
+    $city = $_GET["city"];
     $_SESSION["city"] = $city;
-    $delivery_type =  $_POST["delivery-type"];
+    $delivery_type =  $_GET["delivery-type"];
     $_SESSION["delivery-type"] = $delivery_type;
     // TO DO: ALLE SELECTED ITEMS TOEVOEGEN AAN ARRAY
     // dusver heb ik html al wat kunnen veradneren dat de value veranderd is, maar het lukt me nog niet om verschillende zaken te selecteren
     // opgelet: je moet het dus in je html products[] noemen om dan in je php aan te roepen met products https://www.formget.com/php-checkbox/
-    // echo $_POST["products"];
-    // print_r($_POST["products"]);
-    // echo serialize($_POST["products"]);
-    $items_selected = $_POST["products"];
+    // echo $_GET["products"];
+    // print_r($_GET["products"]);
+    // echo serialize($_GET["products"]);
+    $items_selected = $_GET["products"];
     // moet ik deze nu serializen of niet? ik heb het op een andere plek gedaan voor de errors zonder te serializen; dus meteen array in cookie gestoken
     // echter: moet ik dit wil in cookie steken? ik denk dat het het beste is voor de klant om dit niet te doen en enkel als alles ok is, volledig door te sturen. Ik zou vooral ontevreden klanten willen vermijden en hen per ongeluk iets laten kopen dat ze niet willen is niet ok.
     /* $_SESSION["items-selected"] = serialize($items_selected);
@@ -105,7 +105,7 @@ if (isset($_POST["submit"])) {
 
 $_SESSION["error-array-cookie"] = $error_array;
 
-if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
+if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // VRAAG: neem ik nu best cookies of variabele of maakt het niet uit?
     class order
     {
@@ -138,7 +138,7 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // $total_order = 0;
     $total_order = "total order";
     $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
-    var_dump($new_order);
+    // var_dump($new_order);
     // na bevolking van de variabele door constructorfunctie ook waarde doorgeven aan variabele die onderaan de pagina staat
     $totalValue = $new_order->$total_order;
 
@@ -151,7 +151,7 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
         // echo $price;
         $ordered_items_string = $ordered_items_string . "A $item voor $price euro, ";
     }
-    var_dump($ordered_items_string);
+    // var_dump($ordered_items_string);
 
     $message = "";
     // opgelet: hieronder spreek ik eigenlijk niet mijn object aan. Hoewel een interessante oefening, heb ik het nu zo gedaan.
@@ -159,7 +159,7 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // echo $message;
 
     //DEZE BESTE DUSVER
-    mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
+    // mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
 
 
     // TO DO nu mail maken die er mooi uitziet in e-mailclient. Sander heeft daar een mooiere manier voor, door een html tempalte te maken, die aan te roepen met file_get_contents en dan een aantal zaken te veradneren"

@@ -33,7 +33,7 @@
             echo "</ul>";
             echo "</div>";
         }
-        if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
+        if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
             echo '<div class="alert alert-primary" role="alert">';
             echo "your order was succesfully sent! Feeding process initiated";
             echo "</div>";
