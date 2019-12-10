@@ -126,7 +126,11 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
             foreach ($items_selected_new as $key => $value) {
                 // moest het omvormen, want anders kwam hij gelijk soms op  6 terwijl het resultaat 5 moest zijn
                 $this->$total_order += (float) $value;
+                // var_dump($key);
+                // var_dump($value);
             }
+            // AH, DENK DAT IK HET HEB: linkerkant is de naam die het binnen het object krijgt en die kan je aanpassen
+            $this->ordered_items = $items_selected_new;
             // $this->$total_order = $value_float;
             // $this->$total_order = $total_order * 2;
         }
@@ -134,17 +138,28 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // $total_order = 0;
     $total_order = "total order";
     $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
-    // var_dump($new_order);
+    var_dump($new_order);
     // na bevolking van de variabele door constructorfunctie ook waarde doorgeven aan variabele die onderaan de pagina staat
     $totalValue = $new_order->$total_order;
 
+    // nu van al die verschillende gekochte zaken in het object een string maken om mee te geven met de message (ook een string)
+    // OPGELET: GEEN $ BIJ ODNERSTAANDE PROPERTY
+    //print_r($new_order->delivery_type);
+    $ordered_items_string = "";
+    foreach ($new_order->ordered_items as $item => $price) {
+        // echo $item;
+        // echo $price;
+        $ordered_items_string = $ordered_items_string . "A $item voor $price euro, ";
+    }
+    var_dump($ordered_items_string);
+
     $message = "";
     // opgelet: hieronder spreek ik eigenlijk niet mijn object aan. Hoewel een interessante oefening, heb ik het nu zo gedaan.
-    $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. The order is TO DO. The amount to be paid is $totalValue";
+    $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. You have ordered $ordered_items_string. The amount to be paid is $totalValue";
     // echo $message;
 
     //DEZE BESTE DUSVER
-    // mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
+    mail("declercqjan@gmail.com", "object eens proberen doorsturen", $message);
 
 
     // TO DO nu mail maken die er mooi uitziet in e-mailclient. Sander heeft daar een mooiere manier voor, door een html tempalte te maken, die aan te roepen met file_get_contents en dan een aantal zaken te veradneren"
