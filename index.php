@@ -109,7 +109,7 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // VRAAG: neem ik nu best cookies of variabele of maakt het niet uit?
     class order
     {
-        public function __construct($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new)
+        public function __construct($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order)
         {
             $this->email = $email;
             $this->street = $street;
@@ -117,21 +117,24 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
             $this->city = $city;
             $this->zipcode = $zipcode;
             $this->delivery_type = $delivery_type;
-            $this->$items_selected_new = $items_selected_new;
+            // $this->$items_selected_new = $items_selected_new;
+            // $this->$test = "test";
+            // GEEN IDEE WAAROM DIT ZO MOET, DOOR PRUTSEN GEVODNEN HOE IK DE PROPERTY VAN DE ARRAY MOET ZETTEN, MAAR NOG ALTIJD EEN NOTICE OMDAT HET NIET IN MIOJN DECLARATIE VAN NEW ORDER ZIT HIERONDER
+            // idee: het toevoegen als een empty ding via de parameters die naar de constructor wordt gestuurd
+            // heb dan ook nog een foutmelding gekregen van dat het niet numeric was en er dan een float op toegepast. waarom dait zo werkt, is me onbekend. Ik dacht een string doorgestuurd te hebben met een tekst, maja
+            $this->$total_order = (float) $total_order;
+            foreach ($items_selected_new as $key => $value) {
+                // moest het omvormen, want anders kwam hij gelijk soms op  6 terwijl het resultaat 5 moest zijn
+                $this->$total_order +=(float) $value;
+            }
+            // $this->$total_order = $value_float;
+            // $this->$total_order = $total_order * 2;
         }
     }
-    $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new);
+    // $total_order = 0;
+    $total_order = "total order";
+    $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
     var_dump($new_order);
-
-    $order_total = 0;
-    $totalValue = "to do";
-
-    // nog omvormen van array met meerdere orders naar een string.
-    foreach ($items_selected_new as $order_item) {
-        print_r($order_item);
-        $order_total = $order_total + $order_item[2];
-    }
-    print_r($order_total);
 
     $message = "";
     $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. The order is TO DO <br>";
