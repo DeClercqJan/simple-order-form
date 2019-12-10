@@ -70,8 +70,37 @@ if (isset($_POST["submit"])) {
     $_SESSION["delivery-type"] = $delivery_type;
     // TO DO: ALLE SELECTED ITEMS TOEVOEGEN AAN ARRAY
     // dusver heb ik html al wat kunnen veradneren dat de value veranderd is, maar het lukt me nog niet om verschillende zaken te selecteren
-    $items_selected = [];
-
+    // opgelet: je moet het dus in je html products[] noemen om dan in je php aan te roepen met products https://www.formget.com/php-checkbox/
+    // echo $_POST["products"];
+    // print_r($_POST["products"]);
+    // echo serialize($_POST["products"]);
+    $items_selected = $_POST["products"];
+    // moet ik deze nu serializen of niet? ik heb het op een andere plek gedaan voor de errors zonder te serializen; dus meteen array in cookie gestoken
+    // echter: moet ik dit wil in cookie steken? ik denk dat het het beste is voor de klant om dit niet te doen en enkel als alles ok is, volledig door te sturen. Ik zou vooral ontevreden klanten willen vermijden en hen per ongeluk iets laten kopen dat ze niet willen is niet ok.
+    /* $_SESSION["items-selected"] = serialize($items_selected);
+    if (isset($_SESSION["items-selected"])) {
+        print_r($_SESSION["items-selected"]);
+        unserialize()
+    }
+    */
+    // ik moet wél product en prijs scheiden lijkt me
+    // print_r($items_selected);
+    // moet het eigenlijk omvormen hé; dus meteen zo en niet eerst er een hele array van maken; wat allicht ook kan, maar minder direct naar de uikomst gaat
+    $items_selected_new = [];
+    foreach ($items_selected as $key => $value) {
+        // print_r($key);
+        $selected_item_separated = explode(" ", $value);
+        // print_r($selected_item_separated);
+        $key = $selected_item_separated[0];
+        // print_r($key);
+        $value = $selected_item_separated[1];
+        // print_r($value);
+        // print_r($test);
+        // $selected_item_separated = explode(" ", $selected_item);
+        // print_r($selected_item_separated);
+        $items_selected_new[$key] = $value;
+    }
+    // print_r($items_selected_new);
 }
 
 $_SESSION["error-array-cookie"] = $error_array;
@@ -80,7 +109,7 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // VRAAG: neem ik nu best cookies of variabele of maakt het niet uit?
     class order
     {
-        public function __construct($email, $street, $streetnumber, $city, $zipcode, $delivery_type)
+        public function __construct($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new)
         {
             $this->email = $email;
             $this->street = $street;
@@ -88,10 +117,22 @@ if (isset($_POST["submit"]) && empty($_SESSION["error-array-cookie"])) {
             $this->city = $city;
             $this->zipcode = $zipcode;
             $this->delivery_type = $delivery_type;
+            $this->$items_selected_new = $items_selected_new;
         }
     }
-    $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type);
-    // var_dump($new_order);
+    $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new);
+    var_dump($new_order);
+
+    $order_total = 0;
+    $totalValue = "to do";
+
+    // nog omvormen van array met meerdere orders naar een string.
+    foreach ($items_selected_new as $order_item) {
+        print_r($order_item);
+        $order_total = $order_total + $order_item[2];
+    }
+    print_r($order_total);
+
     $message = "";
     $message = "The e-mailadres is $email. The adress is $street $streetnumber. $zipcode $city. The method of delivery is $delivery_type. The order is TO DO <br>";
     // echo $message;
