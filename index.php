@@ -33,6 +33,8 @@ $order_total = 0;
 //edit: deze file onder andere code gezet
 //require 'form-view.php';
 // edit: below all code written by me, Jan
+ob_start();
+
 $products_all = array_merge($products_food, $products_drinks);
 // var_dump($products_drinks);
 // var_dump($products_all_indexed);
@@ -90,8 +92,24 @@ if (isset($_GET["submit"])) {
         // ik moet wél product en prijs scheiden lijkt me
         // print_r($items_selected);
         // moet het eigenlijk omvormen hé; dus meteen zo en niet eerst er een hele array van maken; wat allicht ook kan, maar minder direct naar de uikomst gaat
-        var_dump($items_selected);
+        // var_dump($items_selected);
         $items_selected_new = [];
+
+        // Moest ik hier declareren, niet in foreach, want anders hele tijd nieuwe en dat kan niet
+        class person
+        {
+            var $name;
+            function set_name($new_name)
+            {
+                $this->name = $new_name;
+            }
+
+            function get_name()
+            {
+                return $this->name;
+            }
+        }
+
         foreach ($items_selected as $key => $value) {
             /*
             // print_r($key);
@@ -118,25 +136,18 @@ if (isset($_GET["submit"])) {
                 // echo $product["name"];
                 // var_dump($product["name"]);
                 if ($item_name == $product["name"] && $item_quantity !== 0 && $item_quantity !== "") {
-                    // echo $product["price"];
+                    // echo $product["price"];$
 
-                    class item_selected_new_class
-                    {
-                        public function __construct($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order)
-                        {
-                            $this->email = $email;
-                            $this->street = $street;
-                            $this->streetnumber = $streetnumber;
+                    $item_selected = new person();
+                    $item_selected->name = $product["name"];
+                    $item_selected->price = $product["price"];
+                    $item_selected->quantity = $item_quantity;
 
-                    $item_selected_new->name = $key;
-                    $item_selected_new->quantity = (int) $item_quantity;
-                    $item_selected_new->price = $product["price"];
-                    var_dump($item_selected_new);
-                    array_push($items_selected_new, $item_selected_new);
+                    array_push($items_selected_new, $item_selected);
                 }
             }
         }
-        var_dump($items_selected_new);
+        // var_dump($items_selected_new);
 
         // print_r($items_selected_new);
     } else {
@@ -169,10 +180,10 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
                 // $this->$total_order += (float) $value;
                 // var_dump($key);
                 // var_dump($value);
-                var_dump($item);
-                
-                $item_total_cost = $item["quantity"] * $item["price"];
-                $this->$total_order = $item_total_cost;
+                // var_dump($item);
+                $item_total_cost = $item->quantity * $item->price;
+                // var_dump($item_total_cost);
+                $this->$total_order += $item_total_cost;
             }
             // AH, DENK DAT IK HET HEB: linkerkant is de naam die het binnen het object krijgt en die kan je aanpassen
             $this->ordered_items = $items_selected_new;
@@ -183,7 +194,7 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // $total_order = 0;
     $total_order = "total order";
     $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
-    var_dump($new_order);
+    // var_dump($new_order);
     // na bevolking van de variabele door constructorfunctie ook waarde doorgeven aan variabele die onderaan de pagina staat
     $order_total = $new_order->$total_order;
 
@@ -191,10 +202,10 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // OPGELET: GEEN $ BIJ ODNERSTAANDE PROPERTY
     //print_r($new_order->delivery_type);
     $ordered_items_string = "";
-    foreach ($new_order->ordered_items as $item => $price) {
+    foreach ($new_order->ordered_items as $item) {
         // echo $item;
         // echo $price;
-        $ordered_items_string = $ordered_items_string . "A $item voor $price euro, ";
+        $ordered_items_string = $ordered_items_string . "$item->quantity times a $item->name for $item->price euro each ";
     }
     // var_dump($ordered_items_string);
 
@@ -266,9 +277,10 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
 
 // deze ook verplaatst, want ik sprak al eerder mijn header aan met, ik denk $_SERVER (zie bestand form-view)
 if (!isset($_COOKIE["previous-orders-value"])) {
+    // echo "test";
     if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
         $totalValue_result = $order_total;
-        // echo $order_total;
+        echo $order_total;
         // enigste manier waarop ik cookie kon laten veranderen
         // moest cookie ook string meegeven
         setcookie("previous-orders-value", strval($order_total));
@@ -278,7 +290,7 @@ if (!isset($_COOKIE["previous-orders-value"])) {
 } else {
     if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
         $previous_orders_value = $_COOKIE["previous-orders-value"];
-        echo $previous_orders_value;
+        // echo $previous_orders_value;
         $totalValue = $previous_orders_value + $order_total;
         setcookie("previous-orders-value", strval($totalValue));
         // $totalValue_result = "previeous orders value + nieuwe order indien succesvol hier, zijnde $totalValue";
@@ -293,4 +305,4 @@ if (!isset($_COOKIE["previous-orders-value"])) {
 // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
 require 'form-view.php';
 
-whatIsHappening();
+// whatIsHappening();
