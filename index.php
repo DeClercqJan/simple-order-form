@@ -40,6 +40,25 @@ $products_all = array_merge($products_food, $products_drinks);
 // var_dump($products_all_indexed);
 $error_array = array();
 
+$url = $_SERVER["REQUEST_URI"];
+// echo $url;
+$type_selector_stringnumber = 0;
+if (strpos($url, "?")) {
+    $url_separated = explode("?", $url);
+    // print_r( $url_separated);
+    $type_selector_string = $url_separated[1];
+    // echo $type_selector_string;
+    $type_selector_stringnumber = substr($type_selector_string, -1);
+    // echo $type_selector_stringnumber;
+}
+if ($type_selector_stringnumber == 1) {
+    echo "food selected";
+}
+if ($type_selector_stringnumber == 0) {
+    echo "drinks selected";
+}
+
+
 if (isset($_GET["submit"])) {
     // was niet gemakkelijk om verschillende issets voor fields te combineren // 
     // opgelet: is set werkt niet goed, omdat het blijkbaar een empty string is var_dump($_GET["email"]);
@@ -65,7 +84,29 @@ if (isset($_GET["submit"])) {
     } else {
         array_push($error_array, "You need to enter a number in the zipcode number field");
     }
+    /* HIERBOVEN OP ANDERE MANIER PROBEREN
+    if (!empty($_GET["products"])) {
+        echo "is not empty";
+        $products_arrayke = $_GET["products"];
+        var_dump($products_arrayke);
 
+        foreach ($products_arrayke as $key => $value) {
+            if ($value == "0") {
+                unset($products_arrayke[$key]);
+            } else {
+                $_SESSION["products[$key"] = $value;
+            }
+        }
+        var_dump($products_arrayke);
+        if (empty($products_arrayke)) {
+            array_push($error_array, "You need to order at least one product to your order, son!");
+        }
+
+        // if (in_array($products_arrayke, "0")) {
+        //     array_push($error_array, "You need to order at least one product to your order, son!");
+        // }
+    }
+    */
     $street = $_GET["street"];
     $_SESSION["street"] = $street;
     $city = $_GET["city"];
@@ -87,14 +128,13 @@ if (isset($_GET["submit"])) {
         foreach ($items_selected as $key => $value) {
             if (empty($value)) {
                 unset($items_selected[$key]);
-            }
-            else {
+            } else {
                 echo $_SESSION["products[$key]"];
                 $_SESSION["products[$key]"] = $value;
             }
         }
         var_dump($items_selected);
-        
+
         // moet ik deze nu serializen of niet? ik heb het op een andere plek gedaan voor de errors zonder te serializen; dus meteen array in cookie gestoken
         // echter: moet ik dit wil in cookie steken? ik denk dat het het beste is voor de klant om dit niet te doen en enkel als alles ok is, volledig door te sturen. Ik zou vooral ontevreden klanten willen vermijden en hen per ongeluk iets laten kopen dat ze niet willen is niet ok.
         /* $_SESSION["items-selected"] = serialize($items_selected);
