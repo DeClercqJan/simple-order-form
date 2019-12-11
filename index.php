@@ -74,33 +74,37 @@ if (isset($_GET["submit"])) {
     // echo $_GET["products"];
     // print_r($_GET["products"]);
     // echo serialize($_GET["products"]);
-    $items_selected = $_GET["products"];
-    // moet ik deze nu serializen of niet? ik heb het op een andere plek gedaan voor de errors zonder te serializen; dus meteen array in cookie gestoken
-    // echter: moet ik dit wil in cookie steken? ik denk dat het het beste is voor de klant om dit niet te doen en enkel als alles ok is, volledig door te sturen. Ik zou vooral ontevreden klanten willen vermijden en hen per ongeluk iets laten kopen dat ze niet willen is niet ok.
-    /* $_SESSION["items-selected"] = serialize($items_selected);
+    if (!empty($_GET["products"])) {
+        // opm: ik steek het bewust niet in een sessie, omdati k wil vermijden dat mensen per ongeluk wat verkeerd bestellen
+        $items_selected = $_GET["products"];
+        // moet ik deze nu serializen of niet? ik heb het op een andere plek gedaan voor de errors zonder te serializen; dus meteen array in cookie gestoken
+        // echter: moet ik dit wil in cookie steken? ik denk dat het het beste is voor de klant om dit niet te doen en enkel als alles ok is, volledig door te sturen. Ik zou vooral ontevreden klanten willen vermijden en hen per ongeluk iets laten kopen dat ze niet willen is niet ok.
+        /* $_SESSION["items-selected"] = serialize($items_selected);
     if (isset($_SESSION["items-selected"])) {
         print_r($_SESSION["items-selected"]);
         unserialize()
     }
     */
-    // ik moet wél product en prijs scheiden lijkt me
-    // print_r($items_selected);
-    // moet het eigenlijk omvormen hé; dus meteen zo en niet eerst er een hele array van maken; wat allicht ook kan, maar minder direct naar de uikomst gaat
-    $items_selected_new = [];
-    foreach ($items_selected as $key => $value) {
-        // print_r($key);
-        $selected_item_separated = explode(" ", $value);
-        // print_r($selected_item_separated);
-        $key = $selected_item_separated[0];
-        // print_r($key);
-        $value = $selected_item_separated[1];
-        // print_r($value);
-        // print_r($test);
-        // $selected_item_separated = explode(" ", $selected_item);
-        // print_r($selected_item_separated);
-        $items_selected_new[$key] = $value;
+        // ik moet wél product en prijs scheiden lijkt me
+        // print_r($items_selected);
+        // moet het eigenlijk omvormen hé; dus meteen zo en niet eerst er een hele array van maken; wat allicht ook kan, maar minder direct naar de uikomst gaat
+        foreach ($items_selected as $key => $value) {
+            // print_r($key);
+            $selected_item_separated = explode(" ", $value);
+            // print_r($selected_item_separated);
+            $key = $selected_item_separated[0];
+            // print_r($key);
+            $value = $selected_item_separated[1];
+            // print_r($value);
+            // print_r($test);
+            // $selected_item_separated = explode(" ", $selected_item);
+            // print_r($selected_item_separated);
+            $items_selected_new[$key] = $value;
+        }
+        // print_r($items_selected_new);
+    } else {
+        array_push($error_array, "You need to add some sammiches and/or dranks to your order");
     }
-    // print_r($items_selected_new);
 }
 
 $_SESSION["error-array-cookie"] = $error_array;
@@ -247,3 +251,5 @@ if (!isset($_COOKIE["previous-orders-value"])) {
 
 // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
 require 'form-view.php';
+
+whatIsHappening();
