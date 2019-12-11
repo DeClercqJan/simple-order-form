@@ -116,20 +116,35 @@
                 }
                 if ($type_selector_stringnumber == 1) {
                     // ook moeten aanpassen zodat value gepakt wordt
-                    foreach ($products_food as $i => $product) : ?>
-                        <label>
-                            <input type="number" value="<?php echo $product['name'] . " " . $product['price']; ?>" min="0" name="products[<?php echo $product['name'];
-                            ?>]"/> <?php echo $product['name'] ?> -
-                            &euro; <?php echo number_format($product['price'], 2) ?></label><br />
-                    <?php endforeach;
-                    } else {
-                        foreach ($products_drinks as $i => $product) : ?>
-                        <label>
-                            <input type="number" value="<?php echo $product['name'] . " " . $product['price']; ?>" min="0" name="products[<?php echo $product['name'];
-                            ?>]"/> <?php echo $product['name'] ?> -
-                            &euro; <?php echo number_format($product['price'], 2) ?></label><br />
-                <?php endforeach;
-                } ?>
+                    foreach ($products_food as $i => $product) :
+                        //var_dump($_SESSION["products[Cola]"]);
+                        $productname = $product["name"]; ?>
+                <label>
+                    <input type="number" value="<?php //var_dump($_SESSION["products[$product]"]);
+                                                        if (isset($_SESSION["products[$productname]"]) && !empty($_SESSION["products[$productname]"])) {
+                                                            echo $_SESSION["products[$productname]"];
+                                                        } else {
+                                                            echo 0;
+                                                        }
+                                                        ?>" min="0" name="products[<?php echo $product['name'];
+                                                                                                    ?>]" /> <?php echo $product['name'] ?> -
+                    &euro; <?php echo number_format($product['price'], 2) ?></label><br />
+            <?php endforeach;
+            } else {
+                foreach ($products_drinks as $i => $product) :
+                    $productname = $product["name"]; ?>
+                <label>
+                    <input type="number" value="<?php //var_dump($_SESSION["products[$product]"]);
+                                                        if (isset($_SESSION["products[$productname]"]) && !empty($_SESSION["products[$productname]"])) {
+                                                            echo $_SESSION["products[$productname]"];
+                                                        } else {
+                                                            echo 0;
+                                                        }
+                                                        ?>" min="0" name="products[<?php echo $product['name'];
+                                                                                                    ?>]" /> <?php echo $product['name'] ?> -
+                    &euro; <?php echo number_format($product['price'], 2) ?></label><br />
+        <?php endforeach;
+        } ?>
             </fieldset>
             <fieldset>
                 <legend>Products</legend>

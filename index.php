@@ -81,6 +81,20 @@ if (isset($_GET["submit"])) {
     if (!empty($_GET["products"])) {
         // opm: ik steek het bewust niet in een sessie, omdati k wil vermijden dat mensen per ongeluk wat verkeerd bestellen
         $items_selected = $_GET["products"];
+        var_dump($items_selected);
+        // hier deze gezet omdat ik nu de drankjes enzo wil opslaan in sessies als je togglet tussen drank en sammiches. 
+        // eigenlijk dient de hieronder staande check onder for each products as product niet meer, maar goed: legacy
+        foreach ($items_selected as $key => $value) {
+            if (empty($value)) {
+                unset($items_selected[$key]);
+            }
+            else {
+                echo $_SESSION["products[$key]"];
+                $_SESSION["products[$key]"] = $value;
+            }
+        }
+        var_dump($items_selected);
+        
         // moet ik deze nu serializen of niet? ik heb het op een andere plek gedaan voor de errors zonder te serializen; dus meteen array in cookie gestoken
         // echter: moet ik dit wil in cookie steken? ik denk dat het het beste is voor de klant om dit niet te doen en enkel als alles ok is, volledig door te sturen. Ik zou vooral ontevreden klanten willen vermijden en hen per ongeluk iets laten kopen dat ze niet willen is niet ok.
         /* $_SESSION["items-selected"] = serialize($items_selected);
@@ -98,16 +112,7 @@ if (isset($_GET["submit"])) {
         // Moest ik hier declareren, niet in foreach, want anders hele tijd nieuwe en dat kan niet
         class person
         {
-            var $name;
-            function set_name($new_name)
-            {
-                $this->name = $new_name;
-            }
-
-            function get_name()
-            {
-                return $this->name;
-            }
+            // will fill this up later; not set here
         }
 
         foreach ($items_selected as $key => $value) {
@@ -132,8 +137,8 @@ if (isset($_GET["submit"])) {
             // var_dump(array_intersect($items_selected, $products_all));
             // var_dump($products_all);
             foreach ($products_all as $product) {
-                // var_dump($product);
-                // echo $product["name"];
+                //var_dump($product);
+                //echo $product["name"];
                 // var_dump($product["name"]);
                 if ($item_name == $product["name"] && $item_quantity !== 0 && $item_quantity !== "") {
                     // echo $product["price"];$
@@ -148,6 +153,8 @@ if (isset($_GET["submit"])) {
             }
         }
         // var_dump($items_selected_new);
+
+
 
         // print_r($items_selected_new);
     } else {
@@ -305,4 +312,5 @@ if (!isset($_COOKIE["previous-orders-value"])) {
 // deze verplaatst, want anders moest ik 2 keer drukken op knop alvorens ik de reeds ingevulde velden kon laten bevolken door cookies. ik vermoed dat het komt door de volgorde van uitvoeren
 require 'form-view.php';
 
-// whatIsHappening();
+whatIsHappening();
+//var_dump($_SESSION["products[Cola]"]);
