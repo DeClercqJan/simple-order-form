@@ -33,7 +33,9 @@ $order_total = 0;
 //edit: deze file onder andere code gezet
 //require 'form-view.php';
 // edit: below all code written by me, Jan
-
+$products_all = array_merge($products_food, $products_drinks);
+// var_dump($products_drinks);
+// var_dump($products_all_indexed);
 $error_array = array();
 
 if (isset($_GET["submit"])) {
@@ -88,7 +90,10 @@ if (isset($_GET["submit"])) {
         // ik moet wél product en prijs scheiden lijkt me
         // print_r($items_selected);
         // moet het eigenlijk omvormen hé; dus meteen zo en niet eerst er een hele array van maken; wat allicht ook kan, maar minder direct naar de uikomst gaat
+        var_dump($items_selected);
+        $items_selected_new = [];
         foreach ($items_selected as $key => $value) {
+            /*
             // print_r($key);
             $selected_item_separated = explode(" ", $value);
             // print_r($selected_item_separated);
@@ -100,7 +105,39 @@ if (isset($_GET["submit"])) {
             // $selected_item_separated = explode(" ", $selected_item);
             // print_r($selected_item_separated);
             $items_selected_new[$key] = $value;
+            */
+            $item_name = $key;
+            $item_quantity = $value;
+            // var_dump($item_name);
+            // var_dump($item_quantity);
+            // PROBERREN BIJHORENDE PRIJZEN OP TE HALEN
+            // var_dump(array_intersect($items_selected, $products_all));
+            // var_dump($products_all);
+            foreach ($products_all as $product) {
+                // var_dump($product);
+                // echo $product["name"];
+                // var_dump($product["name"]);
+                if ($item_name == $product["name"] && $item_quantity !== 0 && $item_quantity !== "") {
+                    // echo $product["price"];
+
+                    class item_selected_new_class
+                    {
+                        public function __construct($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order)
+                        {
+                            $this->email = $email;
+                            $this->street = $street;
+                            $this->streetnumber = $streetnumber;
+
+                    $item_selected_new->name = $key;
+                    $item_selected_new->quantity = (int) $item_quantity;
+                    $item_selected_new->price = $product["price"];
+                    var_dump($item_selected_new);
+                    array_push($items_selected_new, $item_selected_new);
+                }
+            }
         }
+        var_dump($items_selected_new);
+
         // print_r($items_selected_new);
     } else {
         array_push($error_array, "You need to add some sammiches and/or dranks to your order");
@@ -127,11 +164,15 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
             // idee: het toevoegen als een empty ding via de parameters die naar de constructor wordt gestuurd
             // heb dan ook nog een foutmelding gekregen van dat het niet numeric was en er dan een float op toegepast. waarom dait zo werkt, is me onbekend. Ik dacht een string doorgestuurd te hebben met een tekst, maja
             $this->$total_order = (float) $total_order;
-            foreach ($items_selected_new as $key => $value) {
+            foreach ($items_selected_new as $item) {
                 // moest het omvormen, want anders kwam hij gelijk soms op  6 terwijl het resultaat 5 moest zijn
-                $this->$total_order += (float) $value;
+                // $this->$total_order += (float) $value;
                 // var_dump($key);
                 // var_dump($value);
+                var_dump($item);
+                
+                $item_total_cost = $item["quantity"] * $item["price"];
+                $this->$total_order = $item_total_cost;
             }
             // AH, DENK DAT IK HET HEB: linkerkant is de naam die het binnen het object krijgt en die kan je aanpassen
             $this->ordered_items = $items_selected_new;
@@ -142,7 +183,7 @@ if (isset($_GET["submit"]) && empty($_SESSION["error-array-cookie"])) {
     // $total_order = 0;
     $total_order = "total order";
     $new_order = new order($email, $street, $streetnumber, $city, $zipcode, $delivery_type, $items_selected_new, $total_order);
-    // var_dump($new_order);
+    var_dump($new_order);
     // na bevolking van de variabele door constructorfunctie ook waarde doorgeven aan variabele die onderaan de pagina staat
     $order_total = $new_order->$total_order;
 

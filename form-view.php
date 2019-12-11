@@ -118,13 +118,15 @@
                     // ook moeten aanpassen zodat value gepakt wordt
                     foreach ($products_food as $i => $product) : ?>
                         <label>
-                            <input type="checkbox" value="<?php echo $product['name'] . " " . $product['price']; ?>" name="products[]" /> <?php echo $product['name'] ?> -
+                            <input type="number" value="<?php echo $product['name'] . " " . $product['price']; ?>" name="products[<?php echo $product['name'];
+                            ?>]"/> <?php echo $product['name'] ?> -
                             &euro; <?php echo number_format($product['price'], 2) ?></label><br />
                     <?php endforeach;
                     } else {
                         foreach ($products_drinks as $i => $product) : ?>
                         <label>
-                            <input type="checkbox" value="<?php echo $product['name'] . " " . $product['price']; ?>" name="products[]" /> <?php echo $product['name'] ?> -
+                            <input type="number" value="<?php echo $product['name'] . " " . $product['price']; ?>" name="products[<?php echo $product['name'];
+                            ?>]"/> <?php echo $product['name'] ?> -
                             &euro; <?php echo number_format($product['price'], 2) ?></label><br />
                 <?php endforeach;
                 } ?>
