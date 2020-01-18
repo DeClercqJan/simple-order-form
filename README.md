@@ -11,6 +11,7 @@
 - automatic e-mail functionality
 
 ## to do's
+- remember food or drinks selected when changing 'tabs' if not clicked on any other button
 - clean up code (it's mess)
 - deploy it live
 
